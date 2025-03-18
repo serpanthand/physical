@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physical Chemistry Revision Tracker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2e2e2e 100%);
+            color: #d4af37;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 900px;
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8), rgba(40, 40, 40, 0.6));
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            color: #eee;
+            transition: all 0.3s ease;
+        }
+
+        th {
+            background: linear-gradient(90deg, #d4af37, #c0992b);
+            color: #1a1a1a;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            border-radius: 8px 8px 0 0;
+        }
+
+        tbody tr {
+            background: linear-gradient(to right, rgba(40, 40, 40, 0.8), rgba(60, 60, 60, 0.6));
+            border-radius: 8px;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(to right, rgba(60, 60, 60, 0.8), rgba(80, 80, 80, 0.6));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        td:nth-child(2), td:nth-child(3), td:nth-child(4) {
+            text-align: center;
+        }
+
+        input[type="radio"] {
+            cursor: pointer;
+            transform: scale(1.4);
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border: 2px solid #d4af37;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        input[type="radio"]:checked {
+            background: linear-gradient(45deg, #d4af37, #c0992b);
+            border-color: #c0992b;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+        }
+
+        input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input[type="radio"]:hover {
+            transform: scale(1.6);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .topic {
+            font-weight: 600;
+            color: #f0e6b2;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #333;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid #d4af37;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #c0992b);
+            width: 0%;
+            transition: width 0.5s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 10px;
+            box-shadow: inset 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 25px;
+            background: linear-gradient(45deg, #d4af37, #c0992b);
+            border: none;
+            border-radius: 25px;
+            color: #1a1a1a;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            font-size: 0.9em;
+            color: #777;
+            opacity: 0.8;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2e2e2e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#d4af37, #c0992b);
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="progress-text" id="progress-text">Progress: 0%</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Topic</th>
+                    <th>Weak</th>
+                    <th>Medium</th>
+                    <th>Strong</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="topic">i) Atomic Structure</td>
+                    <td><input type="radio" name="atomic_structure" id="atomic_structure_weak"></td>
+                    <td><input type="radio" name="atomic_structure" id="atomic_structure_medium"></td>
+                    <td><input type="radio" name="atomic_structure" id="atomic_structure_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">ii) Chemical Eqb</td>
+                    <td><input type="radio" name="chemical_eqb" id="chemical_eqb_weak"></td>
+                    <td><input type="radio" name="chemical_eqb" id="chemical_eqb_medium"></td>
+                    <td><input type="radio" name="chemical_eqb" id="chemical_eqb_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">iii) Chemical Kinetic</td>
+                    <td><input type="radio" name="chemical_kinetic" id="chemical_kinetic_weak"></td>
+                    <td><input type="radio" name="chemical_kinetic" id="chemical_kinetic_medium"></td>
+                    <td><input type="radio" name="chemical_kinetic" id="chemical_kinetic_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">iv) Concentration Term</td>
+                    <td><input type="radio" name="concentration_term" id="concentration_term_weak"></td>
+                    <td><input type="radio" name="concentration_term" id="concentration_term_medium"></td>
+                    <td><input type="radio" name="concentration_term" id="concentration_term_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">v) Ideal Gas</td>
+                    <td><input type="radio" name="ideal_gas" id="ideal_gas_weak"></td>
+                    <td><input type="radio" name="ideal_gas" id="ideal_gas_medium"></td>
+                    <td><input type="radio" name="ideal_gas" id="ideal_gas_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">vi) Ionic Eqb</td>
+                    <td><input type="radio" name="ionic_eqb" id="ionic_eqb_weak"></td>
+                    <td><input type="radio" name="ionic_eqb" id="ionic_eqb_medium"></td>
+                    <td><input type="radio" name="ionic_eqb" id="ionic_eqb_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">vii) Liquid Sol</td>
+                    <td><input type="radio" name="liquid_sol" id="liquid_sol_weak"></td>
+                    <td><input type="radio" name="liquid_sol" id="liquid_sol_medium"></td>
+                    <td><input type="radio" name="liquid_sol" id="liquid_sol_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">viii) Mole Concept</td>
+                    <td><input type="radio" name="mole_concept" id="mole_concept_weak"></td>
+                    <td><input type="radio" name="mole_concept" id="mole_concept_medium"></td>
+                    <td><input type="radio" name="mole_concept" id="mole_concept_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">ix) Real Gas</td>
+                    <td><input type="radio" name="real_gas" id="real_gas_weak"></td>
+                    <td><input type="radio" name="real_gas" id="real_gas_medium"></td>
+                    <td><input type="radio" name="real_gas" id="real_gas_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">x) Redox Reaction</td>
+                    <td><input type="radio" name="redox_reaction" id="redox_reaction_weak"></td>
+                    <td><input type="radio" name="redox_reaction" id="redox_reaction_medium"></td>
+                    <td><input type="radio" name="redox_reaction" id="redox_reaction_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">xi) Surface Chem</td>
+                    <td><input type="radio" name="surface_chem" id="surface_chem_weak"></td>
+                    <td><input type="radio" name="surface_chem" id="surface_chem_medium"></td>
+                    <td><input type="radio" name="surface_chem" id="surface_chem_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">xii) Thermodynamic</td>
+                    <td><input type="radio" name="thermodynamic" id="thermodynamic_weak"></td>
+                    <td><input type="radio" name="thermodynamic" id="thermodynamic_medium"></td>
+                    <td><input type="radio" name="thermodynamic" id="thermodynamic_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">xiii) Thermochem</td>
+                    <td><input type="radio" name="thermochem" id="thermochem_weak"></td>
+                    <td><input type="radio" name="thermochem" id="thermochem_medium"></td>
+                    <td><input type="radio" name="thermochem" id="thermochem_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">xiv) Solid State</td>
+                    <td><input type="radio" name="solid_state" id="solid_state_weak"></td>
+                    <td><input type="radio" name="solid_state" id="solid_state_medium"></td>
+                    <td><input type="radio" name="solid_state" id="solid_state_strong"></td>
+                </tr>
+                <tr>
+                    <td class="topic">xv) Electrochemistry</td>
+                    <td><input type="radio" name="electrochemistry" id="electrochemistry_weak"></td>
+                    <td><input type="radio" name="electrochemistry" id="electrochemistry_medium"></td>
+                    <td><input type="radio" name="electrochemistry" id="electrochemistry_strong"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="reset-btn" id="reset-btn">Reset All</button>
+    </div>
+    <div class="watermark">Created by Your Name</div>
+
+    <script>
+        const radios = document.querySelectorAll('input[type="radio"]');
+        const progress = document.getElementById('progress');
+        const progressText = document.getElementById('progress-text');
+        const resetBtn = document.getElementById('reset-btn');
+        const totalTopics = 15; // Number of topics
+        const maxScorePerTopic = 3; // Maximum score per topic (Strong = 3)
+        const maxTotalScore = totalTopics * maxScorePerTopic; // 15 * 3 = 45
+
+        function updateProgress() {
+            let totalScore = 0;
+
+            // Iterate over each topic (row)
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const weakRadio = row.querySelector('input[id$="_weak"]');
+                const mediumRadio = row.querySelector('input[id$="_medium"]');
+                const strongRadio = row.querySelector('input[id$="_strong"]');
+
+                if (weakRadio.checked) {
+                    totalScore += 1; // Weak: 1 point
+                } else if (mediumRadio.checked) {
+                    totalScore += 2; // Medium: 2 points
+                } else if (strongRadio.checked) {
+                    totalScore += 3; // Strong: 3 points
+                }
+            });
+
+            const percentage = Math.round((totalScore / maxTotalScore) * 100);
+            progress.style.width = `${percentage}%`;
+            progressText.textContent = `Progress: ${percentage}%`;
+        }
+
+        radios.forEach(radio => {
+            // Load saved state
+            const storedValue = localStorage.getItem(radio.id);
+            if (storedValue !== null) {
+                radio.checked = storedValue === 'true';
+            }
+
+            // Save state and update progress on change
+            radio.addEventListener('change', () => {
+                // Update local storage for all radios in the same group
+                const groupName = radio.name;
+                const groupRadios = document.querySelectorAll(`input[name="${groupName}"]`);
+                groupRadios.forEach(r => {
+                    localStorage.setItem(r.id, r.checked);
+                });
+                updateProgress();
+            });
+        });
+
+        resetBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all progress?')) {
+                radios.forEach(radio => {
+                    radio.checked = false;
+                    localStorage.setItem(radio.id, 'false');
+                });
+                updateProgress();
+            }
+        });
+
+        // Initial progress update after loading saved states
+        window.addEventListener('load', updateProgress);
+    </script>
+</body>
+</html>
